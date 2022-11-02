@@ -1,0 +1,34 @@
+#cloud-config
+write_files:
+  - content: |
+      # sample  file
+      publicip = ${public_ip}
+    permissions: '0750'
+    path: /config_files/settings.json
+  - content: |
+      # sample  file
+      publicip = ${public_ip}
+      {
+    "hostname": {
+        "value": "${public_ip}.nip.io"
+    },
+    "disk_path": {
+        "value": "/mnt/tfe"
+    },
+    "enc_password": {
+        "value": "CHANGEME"
+    }
+}
+    permissions: '0750'
+    path: /etc/settings.conf
+runcmd:
+  - until ping -c1 archive.ubuntu.com &>/dev/null; do echo "waiting for networking to initialise" ; sleep 3 ; done 
+  - sudo chmod 644 /vagrant/config_files/settings.json
+  - sudo cat /vagrant/config_files/replicated.conf > /etc/replicated.conf
+  - sudo chmod 644 /etc/replicated.conf
+  - sudo mkdir /mnt/tfe
+  - sudo curl -o install.sh https://install.terraform.io/ptfe/stable
+  - sudo bash ./install.sh no-proxy private-address=${public_ip} public-address=${public_ip}
+packages_update: true
+packages:
+  - unzip
