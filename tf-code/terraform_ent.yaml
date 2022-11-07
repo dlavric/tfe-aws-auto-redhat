@@ -36,7 +36,7 @@ runcmd:
   - sudo mkdir -p /mnt/tfe
   - sudo curl -o install.sh https://install.terraform.io/ptfe/stable
   - PUBLICIP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
-  - sudo sed -i "s/PUBLICIP/$PUBLICIP" /etc/settings.conf /etc/replicated.conf
+  - sudo sed -i -e "s/PUBLICIP/$PUBLICIP/g" /etc/settings.conf /etc/replicated.conf
   - sudo apt-get -y install awscli
   - sudo aws s3 cp s3://daniela-software/license.rli /etc/license.rli 
   - sudo bash ./install.sh no-proxy private-address=$PUBLICIP public-address=$PUBLICIP
