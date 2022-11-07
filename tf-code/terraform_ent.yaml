@@ -1,5 +1,8 @@
 #cloud-config
 write_files:
+  # - content: base64decode(${license})
+  #   permissions: '0640'
+  #   path: /etc/license.rli
   - content: |
       {
         "BypassPreflightChecks": true,
@@ -34,7 +37,8 @@ runcmd:
   - sudo curl -o install.sh https://install.terraform.io/ptfe/stable
   - PUBLICIP=`curl http://169.254.169.254/latest/meta-data/public-ipv4`
   - sudo sed -i "s/PUBLICIP/$PUBLICIP" /etc/settings.conf /etc/replicated.conf
-  - sudo aws s3 cp s3://source-bucket-name/license.rli /etc/license.rli 
+  - sudo apt-get -y install awscli
+  - sudo aws s3 cp s3://daniela-software/license.rli /etc/license.rli 
   - sudo bash ./install.sh no-proxy private-address=$PUBLICIP public-address=$PUBLICIP
 packages_update: true
 packages:

@@ -14,7 +14,7 @@ resource "aws_instance" "instance" {
 
   user_data = templatefile("terraform_ent.yaml", {
     #consul_bootstrap_expect = var.consul_server_count,
-    #public_ip = aws_instance.public-dns.public_ip
+    license = "license.rli"
   })
 
   # user_data = templatefile("cloudinit_tfe_server.yaml", {
