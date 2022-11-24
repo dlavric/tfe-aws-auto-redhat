@@ -1,6 +1,7 @@
 resource "aws_instance" "instance" {
-  ami           = "ami-08d70e59c07c61a3a" # us-west-2
-  instance_type = "t2.medium"
+  ami                  = "ami-08d70e59c07c61a3a" # us-west-2
+  instance_type        = "t2.medium"
+  iam_instance_profile = aws_iam_instance_profile.daniela-profile.name
 
   credit_specification {
     cpu_credits = "unlimited"
@@ -48,6 +49,57 @@ data "aws_instance" "public-dns" {
     name   = "tag:Name"
     values = ["ServerForTFE"]
   }
+}
+
+resource "aws_iam_role" "daniela-role" {
+  name = "daniela-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
+
+resource "aws_iam_instance_profile" "daniela-profile" {
+  name = "daniela-profile"
+  role = aws_iam_role.daniela-role.name
+}
+
+resource "aws_iam_role_policy" "daniela-policy" {
+  name = "daniela-policy"
+  role = aws_iam_role.daniela-role.id
+
+  # Terraform's "jsonencode" function converts a
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "s3:ListBucket",
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
+        ],
+        "Resource" : [
+          "arn:aws:s3:::*/*"
+        ]
+      }
+    ]
+  })
 }
 
 
