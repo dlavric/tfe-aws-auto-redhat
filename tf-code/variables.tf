@@ -8,5 +8,5 @@ variable "instance_name" {
 variable "key_pair" {
   description = "Daniela's Key Pair from AWS west-2"
   type        = string
-  default     = "daniela-key"
+  default     = "daniela-redhat-key"
 }

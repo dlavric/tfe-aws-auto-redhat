@@ -1,5 +1,5 @@
 resource "aws_instance" "instance" {
-  ami                  = "ami-08d70e59c07c61a3a" # us-west-2
+  ami                  = "ami-0e5b5870f6a07759d" # us-west-2
   instance_type        = "t2.medium"
   iam_instance_profile = aws_iam_instance_profile.daniela-profile.name
 
@@ -52,7 +52,7 @@ data "aws_instance" "public-dns" {
 }
 
 resource "aws_iam_role" "daniela-role" {
-  name = "daniela-role"
+  name = "daniela-role-redhat"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -69,12 +69,12 @@ resource "aws_iam_role" "daniela-role" {
 }
 
 resource "aws_iam_instance_profile" "daniela-profile" {
-  name = "daniela-profile"
+  name = "daniela-profile-redhat"
   role = aws_iam_role.daniela-role.name
 }
 
 resource "aws_iam_role_policy" "daniela-policy" {
-  name = "daniela-policy"
+  name = "daniela-policy-redhat"
   role = aws_iam_role.daniela-role.id
 
   # Terraform's "jsonencode" function converts a

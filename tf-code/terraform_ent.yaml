@@ -29,14 +29,20 @@ write_files:
     permissions: '0640'
     path: /etc/settings.json
 runcmd:
-  - until ping -c1 archive.ubuntu.com &>/dev/null; do echo "waiting for networking to initialise" ; sleep 3 ; done 
   - sudo mkdir -p /mnt/tfe
+  - yum -y update
+  - yum -y install unzip
   - sudo curl -o install.sh https://install.terraform.io/ptfe/stable
   - PUBLICIP=`curl -sL http://169.254.169.254/latest/meta-data/public-ipv4`
   - sudo sed -i -e "s/PUBLICIP/$PUBLICIP/g" /etc/settings.json /etc/replicated.conf
-  - sudo apt-get -y install awscli
+  - pushd /var/tmp
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  - unzip awscliv2.zip
+  - sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/local/aws-cli --update
   - sudo aws s3 cp s3://daniela-software/license.rli /etc/license.rli 
   - sudo bash ./install.sh no-proxy private-address=$PUBLICIP public-address=$PUBLICIP
+  - setenforce 0
+  - getenforce
 packages_update: true
 packages:
   - unzip
