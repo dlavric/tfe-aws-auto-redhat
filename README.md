@@ -1,1 +1,1 @@
-# tfe-aws-auto
+# tfe-aws-auto-redhat
