@@ -1,5 +1,22 @@
 # tfe-aws-auto-redhat
 
+
+
+```shell
+cd tf-code
+```
+
+```shell
+terraform init
+
+terraform apply
+```
+
+Connect to the EC2 instance:
+```shell
+ssh -i "daniela-redhat-key.pem" ec2-user@ec2-xx-xx-xx-xx.eu-west-2.compute.amazonaws.com
+```
+
 NOTE: On your MacOS, If the `key.pem` file has the following ACL `@` setup:
 ```shell
 ls -al daniela-redhat-key.pem
