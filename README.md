@@ -35,3 +35,13 @@ ls -al daniela-redhat-key.pem
 ```
 
 For late reference, saving the [forum here](https://apple.stackexchange.com/questions/42177/what-does-signify-in-unix-file-permissions)
+
+Note to myself
+
+When the user-data script fails, check the `var/log/cloud-init.log` & `var/log/cloud-init-output.log`.
+
+As a test, take the script, create a `script.sh` file manually and execute it from the CLI with the following command:
+```shell
+bash -x script.sh 2>&1  | tee -a run.log
+```
+
