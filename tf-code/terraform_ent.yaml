@@ -28,7 +28,6 @@ write_files:
       }
     permissions: '0640'
     path: /var/tmp/settings.json
-write_files:
   - content: |
       # server config file
       sudo mkdir -p /mnt/tfe
